@@ -6,7 +6,7 @@ namespace CleanArchitectureApi.Domain.Products.Entities;
 
 public sealed class Product : BaseEntity
 {
-    public Product()
+    private Product()
     {
         //
     }

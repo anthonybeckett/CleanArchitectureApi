@@ -3,7 +3,7 @@ using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
 namespace CleanArchitectureApi.Application.Customers.DTO;
 
-public class BaseCustomerDto
+public abstract class BaseCustomerDto
 {
     public string? Title { get; set; }
     

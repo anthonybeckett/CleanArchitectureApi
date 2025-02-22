@@ -1,6 +1,6 @@
 namespace CleanArchitectureApi.Application.Products.DTO;
 
-public class BaseProductDto
+public abstract class BaseProductDto
 {
     public string? Description { get; set; }
 

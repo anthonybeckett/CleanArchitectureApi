@@ -1,6 +1,7 @@
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Customers.Events;
 using CleanArchitectureApi.Domain.Customers.ValueObjects;
+using CleanArchitectureApi.Domain.Invoices.Entities;
 using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
 namespace CleanArchitectureApi.Domain.Customers.Entities;
@@ -24,6 +25,8 @@ public sealed class Customer : BaseEntity
     public Address Address { get; private set; }
 
     public Balance Balance { get; private set; }
+    
+    public ICollection<Invoice> Invoices { get; private set; }
 
     public static Customer Create(Title title, Address address)
     {
