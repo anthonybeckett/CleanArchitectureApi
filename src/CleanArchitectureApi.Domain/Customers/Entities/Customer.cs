@@ -33,4 +33,10 @@ public sealed class Customer : BaseEntity
 
         return customer;
     }
+
+    public void Update(Title title, Address address)
+    {
+        Title = title;
+        Address = address;
+    }
 }

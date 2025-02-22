@@ -9,7 +9,6 @@
     <ItemGroup>
       <Folder Include="InvoiceItems\" />
       <Folder Include="Invoices\" />
-      <Folder Include="Products\" />
     </ItemGroup>
 
 </Project>
