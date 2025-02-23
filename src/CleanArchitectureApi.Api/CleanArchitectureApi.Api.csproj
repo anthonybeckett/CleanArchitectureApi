@@ -17,4 +17,10 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\CleanArchitectureApi.Application\CleanArchitectureApi.Application.csproj" />
+      <ProjectReference Include="..\CleanArchitectureApi.Domain\CleanArchitectureApi.Domain.csproj" />
+      <ProjectReference Include="..\CleanArchitectureApi.Infrastructure\CleanArchitectureApi.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
