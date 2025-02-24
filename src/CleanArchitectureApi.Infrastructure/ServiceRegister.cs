@@ -1,3 +1,5 @@
+using CleanArchitectureApi.Domain.Abstractions;
+using CleanArchitectureApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +12,8 @@ public static class ServiceRegister
     {
         AddDbConnection(services, configuration);
         
+        AddServicesToDiContainer(services, configuration);
+        
         return services;
     }
 
@@ -20,6 +24,16 @@ public static class ServiceRegister
             options.UseSqlServer(configuration.GetConnectionString("Database"));
         });
 
+        return services;
+    }
+
+    private static IServiceCollection AddServicesToDiContainer(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        
+        services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+        
         return services;
     }
 }

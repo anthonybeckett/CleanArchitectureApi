@@ -16,10 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Configurations\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\CleanArchitectureApi.Application\CleanArchitectureApi.Application.csproj" />
       <ProjectReference Include="..\CleanArchitectureApi.Domain\CleanArchitectureApi.Domain.csproj" />
     </ItemGroup>
