@@ -10,4 +10,20 @@
       <ProjectReference Include="..\CleanArchitectureApi.Domain\CleanArchitectureApi.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Abstractions\Behaviours\" />
+      <Folder Include="Abstractions\Cache\" />
+      <Folder Include="Abstractions\Emails\" />
+      <Folder Include="Customers\Commands\" />
+      <Folder Include="Customers\Queries\" />
+      <Folder Include="Invoices\Commands\" />
+      <Folder Include="Invoices\Queries\" />
+      <Folder Include="Products\Commands\" />
+      <Folder Include="Products\Queries\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+
 </Project>

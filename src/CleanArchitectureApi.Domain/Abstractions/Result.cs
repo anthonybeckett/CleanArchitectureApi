@@ -1,6 +1,6 @@
 namespace CleanArchitectureApi.Domain.Abstractions;
 
-public class Result<TEntity> where TEntity : BaseEntity
+public class Result<TEntity>
 {
     private Result(TEntity? entity, int statusCode)
     {
