@@ -3,4 +3,4 @@ using MediatR;
 
 namespace CleanArchitectureApi.Application.Abstractions.Messaging.Queries;
 
-public interface IQuery<TResponse> : IRequest<Result<TResponse>>;
+public interface IQuery<TResponse> : IRequest<Result<TResponse>> where TResponse : IResult;

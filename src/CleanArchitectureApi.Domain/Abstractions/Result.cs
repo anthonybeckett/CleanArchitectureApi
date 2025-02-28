@@ -1,6 +1,6 @@
 namespace CleanArchitectureApi.Domain.Abstractions;
 
-public class Result<TEntity>
+public class Result<TEntity> where TEntity : IResult
 {
     private Result(TEntity? entity, int statusCode)
     {
@@ -50,5 +50,3 @@ public class Result<TEntity>
     public static Result<TEntity> Failure(int statusCode, Dictionary<string, string> errors) 
         => new(statusCode, errors);
 }
-
-public class NoContentDto;
