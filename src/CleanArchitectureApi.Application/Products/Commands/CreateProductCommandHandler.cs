@@ -28,6 +28,6 @@ internal sealed class CreateProductCommandHandler(IUnitOfWork unitOfWork, IMappe
         
         var response = _mapper.Map<Product, ProductResponse>(product);
 
-        return Result<ProductResponse>.Success(response, (int) HttpStatusCode.Created);
+        return Result<ProductResponse>.Success(response, HttpStatusCode.Created);
     }
 }
