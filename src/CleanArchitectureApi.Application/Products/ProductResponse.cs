@@ -6,11 +6,11 @@ namespace CleanArchitectureApi.Application.Products;
 
 public class ProductResponse : IResult
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
-    public string Description { get; set; }
+    public string Description { get; init; } = null!;
 
-    public decimal UnitPrice { get; set; }
+    public decimal UnitPrice { get; init; }
 }
 
 public class ProductMapper : Profile
@@ -21,4 +21,9 @@ public class ProductMapper : Profile
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Value))
             .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice.Value));
     }
+}
+
+public class ProductResponseCollection : IResult
+{
+    public IReadOnlyCollection<ProductResponse>? Products { get; set; }
 }
