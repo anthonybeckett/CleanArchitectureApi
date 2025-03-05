@@ -14,7 +14,6 @@
       <Folder Include="Abstractions\Behaviours\" />
       <Folder Include="Abstractions\Cache\" />
       <Folder Include="Abstractions\Emails\" />
-      <Folder Include="Customers\Commands\" />
       <Folder Include="Customers\Queries\" />
       <Folder Include="Invoices\Commands\" />
       <Folder Include="Invoices\Queries\" />
