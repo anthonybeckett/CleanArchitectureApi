@@ -3,4 +3,4 @@ using CleanArchitectureApi.Application.Products.DTO;
 
 namespace CleanArchitectureApi.Application.Products.Commands;
 
-public record UpdateProductCommand(UpdateProductDto Dto) : ICommand;
+public record UpdateProductCommand(Guid ProductId, UpdateProductDto Dto) : ICommand;

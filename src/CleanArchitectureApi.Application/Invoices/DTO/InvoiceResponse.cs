@@ -32,6 +32,6 @@ public class InvoiceMapper : Profile
         CreateMap<Invoice, InvoiceResponse>()
             .ForMember(dest => dest.PoNumber, opt => opt.MapFrom(src => src.PoNumber.Value))
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
-            .ForMember(dest => dest.InvoiceBalance, opt => opt.MapFrom(src => src.TotalBalance));
+            .ForMember(dest => dest.InvoiceBalance, opt => opt.MapFrom(src => src.TotalBalance.Value));
     }
 }

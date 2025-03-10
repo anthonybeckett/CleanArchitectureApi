@@ -14,7 +14,7 @@ internal sealed class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : ICom
     public async Task<Result<NoContentDto>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _unitOfWork.Repository<Product>()
-            .GetByIdAsync(request.Dto.ProductId, cancellationToken);
+            .GetByIdAsync(request.ProductId, cancellationToken);
 
         if (product == null)
         {
