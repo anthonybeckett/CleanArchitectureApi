@@ -32,6 +32,14 @@ public class InvoiceItemConfiguration : IEntityTypeConfiguration<InvoiceItem>
                 value => new Quantity(value)
             )
             .IsRequired();
+        
+        builder.Property(item => item.Description)
+            .HasConversion(
+                description => description.Value,
+                value => new Title(value)
+            )
+            .IsRequired()
+            .HasMaxLength(200);
 
         builder.Property(x => x.RowVersion).IsRowVersion();
     }
