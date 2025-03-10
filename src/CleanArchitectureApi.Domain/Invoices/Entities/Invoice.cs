@@ -41,6 +41,7 @@ public sealed class Invoice : BaseEntity
     public Balance TotalBalance { get; set; }
 
     public static Invoice Create(
+        Guid invoiceId,
         PoNumber poNumber,
         Guid customerId,
         ICollection<InvoiceItem> purchasedProductsItems,
@@ -52,35 +53,13 @@ public sealed class Invoice : BaseEntity
             throw new InvalidOperationException("Empty invoice cannot be created");
         }
 
-        var invoiceId = Guid.NewGuid();
-        ICollection<InvoiceItem> purchasedProducts = [];
-
-        // Going to move this into the application layer 
-        // foreach (var purchasedProduct in purchasedProductsItems)
-        // {
-        //     var product = await unitOfWork
-        //                       .Repository<Product>()
-        //                       .GetByIdAsync(purchasedProduct.productId)
-        //                   ?? throw new ArgumentNullException(
-        //                       $"Product with id: {purchasedProduct.productId} not found");
-        //
-        //     var invoiceItem = new InvoiceItem(
-        //         Guid.NewGuid(),
-        //         new Balance(product.UnitPrice.Value),
-        //         new Quantity(purchasedProduct.Quantity),
-        //         invoiceId
-        //     );
-        //
-        //     purchasedProducts.Add(invoiceItem);
-        // }
-
-        var totalBalance = purchasedProducts.Sum(x => x.TotalPrice.Value);
+        var totalBalance = purchasedProductsItems.Sum(x => x.TotalPrice.Value);
 
         var invoice = new Invoice(
             invoiceId,
             poNumber,
             customerId,
-            purchasedProducts,
+            purchasedProductsItems,
             new Balance(totalBalance)
         );
         

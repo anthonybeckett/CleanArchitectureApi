@@ -42,4 +42,7 @@ public sealed class Customer : BaseEntity
         Title = title;
         Address = address;
     }
+
+    public void UpdateBalance(decimal invoiceAmount)
+        => Balance = new Balance(Balance.Value + invoiceAmount);
 }

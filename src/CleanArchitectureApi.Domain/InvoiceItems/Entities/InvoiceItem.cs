@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.InvoiceItems.ValueObjects;
 using CleanArchitectureApi.Domain.Invoices.Entities;
@@ -12,19 +13,23 @@ public class InvoiceItem : BaseEntity
         //
     }
 
-    internal InvoiceItem(
+    public InvoiceItem(
         Guid id,
+        Title description,
         Balance sellPrice,
         Quantity quantity,
         Guid invoiceId
     ) : base(id)
     {
+        Description = description;
         SellPrice = sellPrice;
         Quantity = quantity;
         TotalPrice = new Balance(SellPrice.Value * Quantity.Value);
         InvoiceId = invoiceId;
     }
 
+    public Title Description { get; set; }
+    
     public Balance SellPrice { get; private set; }
 
     public Quantity Quantity { get; private set; }
