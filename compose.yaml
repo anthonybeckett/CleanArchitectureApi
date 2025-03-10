@@ -8,6 +8,9 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Database=Server=cleanarchitectureapi.db;Database=cleanarchitectureapi;User Id=sa;Password=Passw0rd!;TrustServerCertificate=True;
+    ports:
+      - "5000:8080"
+      - "5001:8081"
     depends_on:
       - cleanarchitectureapi.db
     networks:

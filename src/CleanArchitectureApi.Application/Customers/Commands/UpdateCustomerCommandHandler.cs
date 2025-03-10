@@ -15,7 +15,7 @@ internal sealed class UpdateCustomerCommandHandler(IUnitOfWork unitOfWork) : ICo
     public async Task<Result<NoContentDto>> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
         var customer = await _unitOfWork.Repository<Customer>()
-            .GetByIdAsync(request.Dto.CustomerId, cancellationToken);
+            .GetByIdAsync(request.CustomerId, cancellationToken);
         
         if (customer == null)
         {

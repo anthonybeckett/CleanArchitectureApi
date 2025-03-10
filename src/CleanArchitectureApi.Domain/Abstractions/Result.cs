@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json.Serialization;
 
 namespace CleanArchitectureApi.Domain.Abstractions;
 
@@ -36,6 +37,7 @@ public class Result<TEntity> where TEntity : IResult
 
     public TEntity? Data { get; set; }
 
+    [JsonIgnore]
     public bool IsNotSuccessful { get; set; }
     
     public HttpStatusCode StatusCode { get; set; }

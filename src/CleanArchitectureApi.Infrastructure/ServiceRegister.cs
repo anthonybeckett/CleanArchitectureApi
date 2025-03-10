@@ -1,5 +1,7 @@
+using CleanArchitectureApi.Application.Abstractions.Emails;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Infrastructure.Repositories;
+using CleanArchitectureApi.Infrastructure.Services.Email;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +35,8 @@ public static class ServiceRegister
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         
         services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+
+        services.AddScoped<IEmailService, EmailService>();
         
         return services;
     }
