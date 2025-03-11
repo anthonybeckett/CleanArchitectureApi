@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -18,17 +19,18 @@ public class Result<TEntity> where TEntity : IResult
         StatusCode = statusCode;
     }
 
-    public Result(HttpStatusCode statusCode, string errorCode, string errorMessage)
+    private Result(HttpStatusCode statusCode, string errorCode, string errorMessage)
     {
         IsNotSuccessful = true;
         StatusCode = statusCode;
-        Errors = new Dictionary<string, string>
+        Errors = new()
         {
-            { errorCode, errorMessage }
+            ErrorCode = errorCode,
+            ErrorMessage = [errorMessage]
         };
     }
     
-    public Result(HttpStatusCode statusCode, Dictionary<string, string> errors)
+    private Result(HttpStatusCode statusCode, Error errors)
     {
         IsNotSuccessful = true;
         StatusCode = statusCode;
@@ -42,7 +44,7 @@ public class Result<TEntity> where TEntity : IResult
     
     public HttpStatusCode StatusCode { get; set; }
 
-    public Dictionary<string, string>? Errors { get; set; }
+    public Error? Errors { get; set; }
     
     public static Result<TEntity> Success(TEntity? entity, HttpStatusCode statusCode) => new(entity, statusCode);
 
@@ -51,6 +53,15 @@ public class Result<TEntity> where TEntity : IResult
     public static Result<TEntity> Failure(HttpStatusCode statusCode, string errorCode, string errorMessage) 
         => new(statusCode, errorCode, errorMessage);
     
-    public static Result<TEntity> Failure(HttpStatusCode statusCode, Dictionary<string, string> errors) 
+    public static Result<TEntity> Failure(HttpStatusCode statusCode, Error errors) 
         => new(statusCode, errors);
+}
+
+public class Error
+{
+    [Required]
+    public string ErrorCode { get; set; }
+    
+    [Required]
+    public List<string> ErrorMessage { get; set; }
 }
