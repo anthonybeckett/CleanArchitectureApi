@@ -1,3 +1,4 @@
+using CleanArchitectureApi.Api.Extensions;
 using CleanArchitectureApi.Application;
 using CleanArchitectureApi.Infrastructure;
 
@@ -18,6 +19,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCustomExceptionHandler();
 
 app.MapControllers();
 

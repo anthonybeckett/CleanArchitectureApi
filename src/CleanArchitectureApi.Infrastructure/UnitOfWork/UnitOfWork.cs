@@ -1,4 +1,5 @@
 using CleanArchitectureApi.Domain.Abstractions;
+using CleanArchitectureApi.Domain.Shared.Exceptions;
 using CleanArchitectureApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace CleanArchitectureApi.Infrastructure.UnitOfWork;
 
 public class UnitOfWork(ApplicationDbContext applicationDbContext) : IUnitOfWork
 {
-    public async Task<string> CommitAsync(CancellationToken cancellationToken = default, bool checkConcurrency = false)
+    public async Task CommitAsync(CancellationToken cancellationToken = default, bool checkConcurrency = false)
     {
         try
         {
@@ -14,10 +15,8 @@ public class UnitOfWork(ApplicationDbContext applicationDbContext) : IUnitOfWork
         }
         catch (DbUpdateConcurrencyException ex) when (checkConcurrency)
         {
-            return "A concurrency conflict occured while saving changes";
+            throw new ConcurrencyException(["A concurrency conflict occured while saving changes."]);
         }
-
-        return string.Empty;
     }
 
     public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : BaseEntity

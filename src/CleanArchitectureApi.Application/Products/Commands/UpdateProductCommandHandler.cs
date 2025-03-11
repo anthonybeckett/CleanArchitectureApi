@@ -29,7 +29,7 @@ internal sealed class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : ICom
         
         _unitOfWork.Repository<Product>().Update(product);
         
-        await _unitOfWork.CommitAsync(cancellationToken);
+        await _unitOfWork.CommitAsync(cancellationToken, checkConcurrency: true);
 
         return Result<NoContentDto>.Success(HttpStatusCode.NoContent);
     }

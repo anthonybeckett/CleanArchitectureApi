@@ -37,7 +37,7 @@ internal sealed class UpdateCustomerCommandHandler(IUnitOfWork unitOfWork) : ICo
         
         _unitOfWork.Repository<Customer>().Update(customer);
         
-        await _unitOfWork.CommitAsync(cancellationToken);
+        await _unitOfWork.CommitAsync(cancellationToken, checkConcurrency: true);
 
         return Result<NoContentDto>.Success(HttpStatusCode.NoContent);
     }

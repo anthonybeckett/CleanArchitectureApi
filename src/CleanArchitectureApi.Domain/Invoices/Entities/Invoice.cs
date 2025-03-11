@@ -5,6 +5,7 @@ using CleanArchitectureApi.Domain.InvoiceItems.ValueObjects;
 using CleanArchitectureApi.Domain.Invoices.Events;
 using CleanArchitectureApi.Domain.Invoices.ValueObjects;
 using CleanArchitectureApi.Domain.Products.Entities;
+using CleanArchitectureApi.Domain.Shared.Exceptions;
 using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
 namespace CleanArchitectureApi.Domain.Invoices.Entities;
@@ -32,13 +33,13 @@ public sealed class Invoice : BaseEntity
 
     public PoNumber PoNumber { get; private set; }
 
-    public Customer Customer { get; set; }
+    public Customer Customer { get; private set; }
 
-    public Guid CustomerId { get; set; }
+    public Guid CustomerId { get; private set; }
 
-    public ICollection<InvoiceItem> PurchasedProducts { get; set; }
+    public ICollection<InvoiceItem> PurchasedProducts { get; private set; }
 
-    public Balance TotalBalance { get; set; }
+    public Balance TotalBalance { get; private set; }
 
     public static Invoice Create(
         Guid invoiceId,
@@ -50,7 +51,7 @@ public sealed class Invoice : BaseEntity
     {
         if (purchasedProductsItems is null || purchasedProductsItems.Count == 0)
         {
-            throw new InvalidOperationException("Empty invoice cannot be created");
+            throw new BadRequestException(["Empty invoice cannot be created"]);
         }
 
         var totalBalance = purchasedProductsItems.Sum(x => x.TotalPrice.Value);

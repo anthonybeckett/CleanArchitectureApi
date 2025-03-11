@@ -8,6 +8,7 @@ using CleanArchitectureApi.Domain.InvoiceItems.ValueObjects;
 using CleanArchitectureApi.Domain.Invoices.Entities;
 using CleanArchitectureApi.Domain.Invoices.ValueObjects;
 using CleanArchitectureApi.Domain.Products.Entities;
+using CleanArchitectureApi.Domain.Shared.Exceptions;
 using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
 namespace CleanArchitectureApi.Application.Invoices.Commands;
@@ -30,8 +31,8 @@ internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMappe
             var product = await unitOfWork
                               .Repository<Product>()
                               .GetByIdAsync(purchasedProduct.ProductId)
-                          ?? throw new ArgumentNullException(
-                              $"Product with id: {purchasedProduct.ProductId} not found");
+                          ?? throw new NullObjectException(
+                              [$"Product with id: {purchasedProduct.ProductId} not found"]);
 
             var invoiceItem = new InvoiceItem(
                 Guid.NewGuid(),
@@ -47,9 +48,9 @@ internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMappe
         var invoice = Invoice.Create(invoiceId, poNumber, customerId, purchasedProducts, unitOfWork);
 
         await unitOfWork.Repository<Invoice>().CreateAsync(invoice, cancellationToken);
-        
+
         await unitOfWork.CommitAsync(cancellationToken);
-        
+
         var response = _mapper.Map<InvoiceResponse>(invoice);
 
         return Result<InvoiceResponse>.Success(response, HttpStatusCode.Created);
