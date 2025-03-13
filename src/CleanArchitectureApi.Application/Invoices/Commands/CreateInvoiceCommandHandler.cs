@@ -2,6 +2,7 @@ using System.Net;
 using AutoMapper;
 using CleanArchitectureApi.Application.Abstractions.Messaging.Commands;
 using CleanArchitectureApi.Application.Invoices.DTO;
+using CleanArchitectureApi.Application.Invoices.Validation;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.InvoiceItems.Entities;
 using CleanArchitectureApi.Domain.InvoiceItems.ValueObjects;
@@ -13,14 +14,16 @@ using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
 namespace CleanArchitectureApi.Application.Invoices.Commands;
 
-internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMapper _mapper)
+internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
     : ICommandHandler<CreateInvoiceCommand, InvoiceResponse>
 {
     public async Task<Result<InvoiceResponse>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
     {
-        var poNumber = new PoNumber(request.Dto.PoNumber ?? String.Empty);
+        CreateInvoiceValidation.Validate(request);
+        
+        var poNumber = new PoNumber(request.Dto.PoNumber);
 
-        var customerId = Guid.NewGuid();
+        var customerId = request.Dto.CustomerId;
 
         ICollection<InvoiceItem> purchasedProducts = [];
 
@@ -30,7 +33,7 @@ internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMappe
         {
             var product = await unitOfWork
                               .Repository<Product>()
-                              .GetByIdAsync(purchasedProduct.ProductId)
+                              .GetByIdAsync(purchasedProduct.ProductId, cancellationToken)
                           ?? throw new NullObjectException(
                               [$"Product with id: {purchasedProduct.ProductId} not found"]);
 
@@ -51,7 +54,7 @@ internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMappe
 
         await unitOfWork.CommitAsync(cancellationToken);
 
-        var response = _mapper.Map<InvoiceResponse>(invoice);
+        var response = mapper.Map<InvoiceResponse>(invoice);
 
         return Result<InvoiceResponse>.Success(response, HttpStatusCode.Created);
     }

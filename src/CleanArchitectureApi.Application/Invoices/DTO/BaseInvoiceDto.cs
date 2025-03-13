@@ -1,6 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace CleanArchitectureApi.Application.Invoices.DTO;
 
 public abstract class BaseInvoiceDto
 {
-    public string? PoNumber { get; set; }
+    [Required]
+    [MaxLength(45)]
+    public required string? PoNumber { get; set; }
 }

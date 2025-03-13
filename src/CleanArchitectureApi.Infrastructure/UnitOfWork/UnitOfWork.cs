@@ -13,7 +13,7 @@ public class UnitOfWork(ApplicationDbContext applicationDbContext) : IUnitOfWork
         {
             await applicationDbContext.SaveChangesAsync(cancellationToken);
         }
-        catch (DbUpdateConcurrencyException ex) when (checkConcurrency)
+        catch (DbUpdateConcurrencyException) when (checkConcurrency)
         {
             throw new ConcurrencyException(["A concurrency conflict occured while saving changes."]);
         }
