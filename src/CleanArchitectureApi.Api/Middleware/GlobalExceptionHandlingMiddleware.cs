@@ -2,6 +2,7 @@ using System.Net;
 using CleanArchitectureApi.Application.Abstractions.DTO;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Shared.Exceptions;
+using Serilog.Context;
 
 namespace CleanArchitectureApi.Api.Middleware;
 
@@ -15,9 +16,12 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
         }
         catch (Exception exception)
         {
-            logger.LogError(exception, exception.Message);
-
             var exceptionDetails = GetExceptionDetails(exception);
+            
+            using (LogContext.PushProperty("Error", exceptionDetails.Errors!.ErrorMessage, true))
+            {
+                logger.LogError(exception, exception.Message);
+            }
 
             httpContext.Response.StatusCode = (int)exceptionDetails.StatusCode;
 

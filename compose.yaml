@@ -15,7 +15,7 @@
       - cleanarchitectureapi.db
     networks:
       - default
-        
+  
   cleanarchitectureapi.db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: db
@@ -29,9 +29,20 @@
     networks:
       - default
 
+  cleanarchitectureapi.seriLog:
+    image: datalust/seq:latest
+    container_name: seriLog
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "9000:80"
+    networks:
+      - default
+
 volumes:
   mssql-data:
-    
+
 networks:
   default:
     driver: bridge

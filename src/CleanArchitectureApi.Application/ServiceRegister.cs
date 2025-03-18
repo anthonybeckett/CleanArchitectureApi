@@ -1,4 +1,5 @@
 using System.Reflection;
+using CleanArchitectureApi.Application.Abstractions.Behaviours;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CleanArchitectureApi.Application;
@@ -14,6 +15,8 @@ public static class ServiceRegister
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(applicationAssembly);
+
+            config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
         });
 
         return services;

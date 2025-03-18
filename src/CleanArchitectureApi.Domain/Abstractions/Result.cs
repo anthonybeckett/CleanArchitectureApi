@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace CleanArchitectureApi.Domain.Abstractions;
 
-public class Result<TEntity> where TEntity : IResult
+public class Result<TEntity> : ILoggable where TEntity : IResult
 {
     private Result(TEntity? entity, HttpStatusCode statusCode)
     {
