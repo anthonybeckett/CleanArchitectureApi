@@ -6,6 +6,11 @@ namespace CleanArchitectureApi.Domain.Abstractions;
 
 public class Result<TEntity> : ILoggable where TEntity : IResult
 {
+    public Result()
+    {
+        //
+    }
+
     private Result(TEntity? entity, HttpStatusCode statusCode)
     {
         Data = entity;

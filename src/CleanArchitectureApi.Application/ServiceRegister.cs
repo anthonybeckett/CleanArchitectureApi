@@ -17,6 +17,8 @@ public static class ServiceRegister
             config.RegisterServicesFromAssembly(applicationAssembly);
 
             config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
+
+            config.AddOpenBehavior(typeof(CachingBehaviour<,>));
         });
 
         return services;
