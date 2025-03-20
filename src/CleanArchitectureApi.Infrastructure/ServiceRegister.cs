@@ -19,6 +19,8 @@ public static class ServiceRegister
         AddServicesToDiContainer(services, configuration);
 
         AddCaching(services, configuration);
+        
+        AddHealthChecks(services, configuration);
 
         return services;
     }
@@ -50,6 +52,15 @@ public static class ServiceRegister
         services.AddStackExchangeRedisCache(opt => opt.Configuration = configuration.GetConnectionString("Cache"));
 
         services.AddSingleton<ICacheService, CacheService>();
+
+        return services;
+    }
+    
+    private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddSqlServer(configuration.GetConnectionString("Database") ?? throw new InvalidOperationException())
+            .AddRedis(configuration.GetConnectionString("Cache") ?? throw new InvalidOperationException());
 
         return services;
     }

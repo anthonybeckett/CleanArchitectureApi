@@ -2,6 +2,8 @@ using CleanArchitectureApi.Api.Extensions;
 using CleanArchitectureApi.Api.Filters;
 using CleanArchitectureApi.Application;
 using CleanArchitectureApi.Infrastructure;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -45,5 +47,10 @@ app.UseSerilogRequestLogging();
 app.UseCustomExceptionHandler();
 
 app.MapControllers();
+
+app.MapHealthChecks("health-check", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
