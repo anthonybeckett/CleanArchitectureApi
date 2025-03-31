@@ -1,18 +1,19 @@
+using System.Text.Json.Serialization;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Customers.Entities;
 using CleanArchitectureApi.Domain.InvoiceItems.Entities;
 using CleanArchitectureApi.Domain.Invoices.Entities;
 using CleanArchitectureApi.Domain.Products.Entities;
+using CleanArchitectureApi.Infrastructure.Outbox;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CleanArchitectureApi.Infrastructure;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
     : DbContext(options)
 {
-    private readonly IPublisher _publisher = publisher;
-
     public DbSet<Customer> Customers { get; set; }
 
     public DbSet<Product> Products { get; set; }
@@ -20,12 +21,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Invoice> Invoices { get; set; }
 
     public DbSet<InvoiceItem> InvoiceItems { get; set; }
+    
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
+
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
+    {
+        TypeNameHandling = TypeNameHandling.All,
+    };
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        AddDomainEventsAsOutboxMessages();
+        
         var result = await base.SaveChangesAsync(cancellationToken);
-
-        await PublishDomainEvents();
 
         return result;
     }
@@ -37,9 +45,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         base.OnModelCreating(modelBuilder);
     }
 
-    private async Task PublishDomainEvents()
+    private void AddDomainEventsAsOutboxMessages()
     {
-        var domainEvents = ChangeTracker
+        var outboxMessages = ChangeTracker
             .Entries<BaseEntity>()
             .Select(entry => entry.Entity)
             .SelectMany(entity =>
@@ -51,11 +59,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                     return domainEvents;
                 }
             )
-            .ToList();
-
-        foreach (var domainEvent in domainEvents)
-        {
-            await _publisher.Publish(domainEvent);
-        }
+            .Select(domainEvent => new OutboxMessage(
+                Guid.NewGuid(),
+                DateTime.UtcNow,
+                domainEvent.GetType().Name,
+                JsonConvert.SerializeObject(domainEvent, JsonSerializerSettings)
+            )).ToList();
+        
+        AddRange(outboxMessages);
     }
 }

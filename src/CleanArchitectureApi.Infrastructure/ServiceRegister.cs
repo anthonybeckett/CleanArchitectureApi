@@ -1,12 +1,14 @@
 using CleanArchitectureApi.Application.Abstractions.Cache;
 using CleanArchitectureApi.Application.Abstractions.Emails;
 using CleanArchitectureApi.Domain.Abstractions;
+using CleanArchitectureApi.Infrastructure.Outbox;
 using CleanArchitectureApi.Infrastructure.Repositories;
 using CleanArchitectureApi.Infrastructure.Services.Caching;
 using CleanArchitectureApi.Infrastructure.Services.Email;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 
 namespace CleanArchitectureApi.Infrastructure;
 
@@ -19,8 +21,10 @@ public static class ServiceRegister
         AddServicesToDiContainer(services, configuration);
 
         AddCaching(services, configuration);
-        
+
         AddHealthChecks(services, configuration);
+
+        AddBackgroundJobs(services, configuration);
 
         return services;
     }
@@ -55,12 +59,25 @@ public static class ServiceRegister
 
         return services;
     }
-    
+
     private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
             .AddSqlServer(configuration.GetConnectionString("Database") ?? throw new InvalidOperationException())
             .AddRedis(configuration.GetConnectionString("Cache") ?? throw new InvalidOperationException());
+
+        return services;
+    }
+
+    private static IServiceCollection AddBackgroundJobs(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
+
+        services.AddQuartz();
+        
+        services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+
+        services.ConfigureOptions<ProcessOutboxMessagesJobsSetup>();
 
         return services;
     }
