@@ -17,7 +17,7 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
         catch (Exception exception)
         {
             var exceptionDetails = GetExceptionDetails(exception);
-            
+
             using (LogContext.PushProperty("Error", exceptionDetails.Errors!.ErrorMessage, true))
             {
                 logger.LogError(exception, exception.Message);
@@ -46,6 +46,9 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
 
             PayloadFormatException payloadFormatException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
                 payloadFormatException.Error),
+
+            InternalServerException internalServerException => Result<NoContentDto>.Failure(
+                HttpStatusCode.InternalServerError, internalServerException.Errors),
 
             _ => Result<NoContentDto>.Failure(HttpStatusCode.InternalServerError, new Error
             {
