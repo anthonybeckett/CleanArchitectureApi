@@ -54,7 +54,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .WithOne(x => x.Customer)
             .HasForeignKey(x => x.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.Property(x => x.RowVersion).IsRowVersion();
     }
 }

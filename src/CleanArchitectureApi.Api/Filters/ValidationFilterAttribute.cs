@@ -8,7 +8,7 @@ public class ValidationFilterAttribute : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         if (context.ModelState.IsValid) return;
-        
+
         var errors = context
             .ModelState
             .Values

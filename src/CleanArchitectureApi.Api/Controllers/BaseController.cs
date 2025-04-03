@@ -9,5 +9,7 @@ namespace CleanArchitectureApi.Api.Controllers;
 public class BaseController : ControllerBase
 {
     public IActionResult CreateResult<TDto>(Result<TDto> result) where TDto : IResult
-        => result.StatusCode == HttpStatusCode.NoContent ? NoContent() : Ok(result.Data);
+    {
+        return result.StatusCode == HttpStatusCode.NoContent ? NoContent() : Ok(result.Data);
+    }
 }

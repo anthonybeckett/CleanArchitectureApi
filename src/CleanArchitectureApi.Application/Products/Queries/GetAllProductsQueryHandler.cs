@@ -4,7 +4,6 @@ using AutoMapper.QueryableExtensions;
 using CleanArchitectureApi.Application.Abstractions.Messaging.Queries;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Products.Entities;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitectureApi.Application.Products.Queries;
@@ -12,8 +11,8 @@ namespace CleanArchitectureApi.Application.Products.Queries;
 internal sealed class GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     : IQueryHandler<GetAllProductsQuery, ProductResponseCollection>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result<ProductResponseCollection>> Handle(GetAllProductsQuery request,
         CancellationToken cancellationToken)

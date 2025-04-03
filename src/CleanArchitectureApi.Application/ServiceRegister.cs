@@ -9,7 +9,7 @@ public static class ServiceRegister
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        
+
         var applicationAssembly = Assembly.GetExecutingAssembly();
 
         services.AddMediatR(config =>

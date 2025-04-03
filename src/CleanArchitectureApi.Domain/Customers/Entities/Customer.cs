@@ -21,17 +21,17 @@ public sealed class Customer : BaseEntity
     }
 
     public Title Title { get; private set; }
-    
+
     public Address Address { get; private set; }
 
     public Balance Balance { get; private set; }
-    
+
     public ICollection<Invoice> Invoices { get; private set; }
 
     public static Customer Create(Title title, Address address)
     {
-        Customer customer = new Customer(title, address, new Balance(0));
-        
+        var customer = new Customer(title, address, new Balance(0));
+
         customer.RaiseDomainEvent(new CustomerCreatedDomainEvent(customer.Id));
 
         return customer;
@@ -44,5 +44,7 @@ public sealed class Customer : BaseEntity
     }
 
     public void UpdateBalance(decimal invoiceAmount)
-        => Balance = new Balance(Balance.Value + invoiceAmount);
+    {
+        Balance = new Balance(Balance.Value + invoiceAmount);
+    }
 }

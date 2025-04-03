@@ -16,28 +16,26 @@ internal sealed class UpdateCustomerCommandHandler(IUnitOfWork unitOfWork) : ICo
     {
         var customer = await _unitOfWork.Repository<Customer>()
             .GetByIdAsync(request.CustomerId, cancellationToken);
-        
+
         if (customer == null)
-        {
             return Result<NoContentDto>.Failure(HttpStatusCode.BadRequest, "Null.Error", "Customer not found");
-        }
 
         var customerTitle = new Title(request.Dto.Title);
-        
+
         var customerAddress = new Address(
-            AddressLine1: request.Dto.AddressLine1,
-            AddressLine2: request.Dto.AddressLine2,
-            Town: request.Dto.Town,
-            County: request.Dto.County,
-            Postcode: request.Dto.Postcode,
-            Country: request.Dto.Country
+            request.Dto.AddressLine1,
+            request.Dto.AddressLine2,
+            request.Dto.Town,
+            request.Dto.County,
+            request.Dto.Postcode,
+            request.Dto.Country
         );
-        
+
         customer.Update(customerTitle, customerAddress);
-        
+
         _unitOfWork.Repository<Customer>().Update(customer);
-        
-        await _unitOfWork.CommitAsync(cancellationToken, checkConcurrency: true);
+
+        await _unitOfWork.CommitAsync(cancellationToken, true);
 
         return Result<NoContentDto>.Success(HttpStatusCode.NoContent);
     }

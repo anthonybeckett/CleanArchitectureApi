@@ -24,7 +24,7 @@ public class GenericRepository<TEntity>(ApplicationDbContext context) : IGeneric
     public async Task<TEntity?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         await _context.Set<TEntity>().AddAsync(entity, cancellationToken);
-        
+
         return entity;
     }
 

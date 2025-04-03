@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.InvoiceItems.ValueObjects;
 using CleanArchitectureApi.Domain.Invoices.Entities;
@@ -29,10 +28,10 @@ public class InvoiceItem : BaseEntity
     }
 
     public Title Description { get; set; }
-    
-    public Balance SellPrice { get; private set; }
 
-    public Quantity Quantity { get; private set; }
+    public Balance SellPrice { get; }
+
+    public Quantity Quantity { get; }
 
     public Balance TotalPrice { get; private set; }
 

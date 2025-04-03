@@ -28,13 +28,13 @@ public class Result<TEntity> : ILoggable where TEntity : IResult
     {
         IsNotSuccessful = true;
         StatusCode = statusCode;
-        Errors = new()
+        Errors = new Error
         {
             ErrorCode = errorCode,
             ErrorMessage = [errorMessage]
         };
     }
-    
+
     private Result(HttpStatusCode statusCode, Error errors)
     {
         IsNotSuccessful = true;
@@ -44,29 +44,36 @@ public class Result<TEntity> : ILoggable where TEntity : IResult
 
     public TEntity? Data { get; set; }
 
-    [JsonIgnore]
-    public bool IsNotSuccessful { get; set; }
-    
     public HttpStatusCode StatusCode { get; set; }
 
-    public Error? Errors { get; set; }
-    
-    public static Result<TEntity> Success(TEntity? entity, HttpStatusCode statusCode) => new(entity, statusCode);
+    [JsonIgnore] public bool IsNotSuccessful { get; set; }
 
-    public static Result<TEntity> Success(HttpStatusCode statusCode) => new(statusCode);
-    
-    public static Result<TEntity> Failure(HttpStatusCode statusCode, string errorCode, string errorMessage) 
-        => new(statusCode, errorCode, errorMessage);
-    
-    public static Result<TEntity> Failure(HttpStatusCode statusCode, Error errors) 
-        => new(statusCode, errors);
+    public Error? Errors { get; set; }
+
+    public static Result<TEntity> Success(TEntity? entity, HttpStatusCode statusCode)
+    {
+        return new Result<TEntity>(entity, statusCode);
+    }
+
+    public static Result<TEntity> Success(HttpStatusCode statusCode)
+    {
+        return new Result<TEntity>(statusCode);
+    }
+
+    public static Result<TEntity> Failure(HttpStatusCode statusCode, string errorCode, string errorMessage)
+    {
+        return new Result<TEntity>(statusCode, errorCode, errorMessage);
+    }
+
+    public static Result<TEntity> Failure(HttpStatusCode statusCode, Error errors)
+    {
+        return new Result<TEntity>(statusCode, errors);
+    }
 }
 
 public class Error
 {
-    [Required]
-    public string ErrorCode { get; set; }
-    
-    [Required]
-    public List<string> ErrorMessage { get; set; }
+    [Required] public string ErrorCode { get; set; }
+
+    [Required] public List<string> ErrorMessage { get; set; }
 }

@@ -17,17 +17,15 @@ public class LoggingBehaviour<TRequest, TResponse>(ILogger<TRequest> logger) : I
         try
         {
             logger.LogInformation($"Executing request: {requestName}");
-            
+
             var result = await next();
 
             if (result.IsNotSuccessful)
-            {
                 using (LogContext.PushProperty("Error", result.Errors!.ErrorMessage, true))
                 {
                     logger.LogError($"Request failed: {requestName}");
                 }
-            }
-            
+
             logger.LogInformation($"Request successful: {requestName}");
 
             return result;

@@ -1,7 +1,5 @@
 using AutoMapper;
-using CleanArchitectureApi.Application.Invoices.DTO;
 using CleanArchitectureApi.Domain.InvoiceItems.Entities;
-using CleanArchitectureApi.Domain.Invoices.Entities;
 
 namespace CleanArchitectureApi.Application.InvoiceItems.DTO;
 
@@ -10,7 +8,7 @@ public class InvoiceItemResponse
     public string? Description { get; init; }
 
     public decimal UnitPrice { get; init; }
-    
+
     public int Quantity { get; init; }
 
     public decimal TotalPrice { get; init; }

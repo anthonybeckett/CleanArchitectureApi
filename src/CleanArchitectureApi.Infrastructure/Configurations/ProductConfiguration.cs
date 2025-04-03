@@ -24,7 +24,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             )
             .IsRequired()
             .HasPrecision(18, 2);
-        
+
         builder.Property(x => x.RowVersion).IsRowVersion();
     }
 }

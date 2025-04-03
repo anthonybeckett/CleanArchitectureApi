@@ -32,7 +32,7 @@ public class InvoiceItemConfiguration : IEntityTypeConfiguration<InvoiceItem>
                 value => new Quantity(value)
             )
             .IsRequired();
-        
+
         builder.Property(item => item.Description)
             .HasConversion(
                 description => description.Value,

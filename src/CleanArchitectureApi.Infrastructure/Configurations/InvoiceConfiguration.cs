@@ -25,12 +25,12 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
             )
             .IsRequired()
             .HasPrecision(18, 2);
-        
+
         builder.HasMany(invoice => invoice.PurchasedProducts)
             .WithOne(purchasedProduct => purchasedProduct.Invoice)
             .HasForeignKey(purchasedProduct => purchasedProduct.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder.Property(x => x.RowVersion).IsRowVersion();
     }
 }

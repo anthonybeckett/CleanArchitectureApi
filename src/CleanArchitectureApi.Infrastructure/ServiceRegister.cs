@@ -74,7 +74,7 @@ public static class ServiceRegister
         services.Configure<OutboxOptions>(configuration.GetSection("Outbox"));
 
         services.AddQuartz();
-        
+
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
         services.ConfigureOptions<ProcessOutboxMessagesJobsSetup>();

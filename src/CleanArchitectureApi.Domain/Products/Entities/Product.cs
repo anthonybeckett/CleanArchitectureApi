@@ -1,4 +1,3 @@
-using System.Data.SqlTypes;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
@@ -22,11 +21,13 @@ public sealed class Product : BaseEntity
     public Balance UnitPrice { get; private set; }
 
     public static Product Create(Title description, Balance unitPrice)
-        => new Product(
+    {
+        return new Product(
             Guid.NewGuid(),
             description,
             unitPrice
-            );
+        );
+    }
 
     public void Update(Title description, Balance unitPrice)
     {

@@ -29,8 +29,9 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
         }
     }
 
-    private static Result<NoContentDto> GetExceptionDetails(Exception exception) =>
-        exception switch
+    private static Result<NoContentDto> GetExceptionDetails(Exception exception)
+    {
+        return exception switch
         {
             RequestValidationException validationException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
                 validationException.Error),
@@ -56,4 +57,5 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
                 ErrorMessage = ["Unknown exception"]
             })
         };
+    }
 }

@@ -9,12 +9,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitectureApi.Application.Invoices.Queries;
 
-internal sealed class GetAllInvoicesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IQueryHandler<GetAllInvoicesQuery, InvoiceResponseCollection>
+internal sealed class GetAllInvoicesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    : IQueryHandler<GetAllInvoicesQuery, InvoiceResponseCollection>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result<InvoiceResponseCollection>> Handle(GetAllInvoicesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<InvoiceResponseCollection>> Handle(GetAllInvoicesQuery request,
+        CancellationToken cancellationToken)
     {
         var invoices = await _unitOfWork.Repository<Invoice>()
             .GetAll()

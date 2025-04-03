@@ -3,4 +3,4 @@ using CleanArchitectureApi.Application.Customers.DTO;
 
 namespace CleanArchitectureApi.Application.Customers.Queries;
 
-public record GetAllCustomersQuery() : IQuery<CustomerResponseCollection>;
+public record GetAllCustomersQuery : IQuery<CustomerResponseCollection>;

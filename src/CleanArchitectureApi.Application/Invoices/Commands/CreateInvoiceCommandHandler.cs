@@ -20,7 +20,7 @@ internal sealed class CreateInvoiceCommandHandler(IUnitOfWork unitOfWork, IMappe
     public async Task<Result<InvoiceResponse>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
     {
         CreateInvoiceValidation.Validate(request);
-        
+
         var poNumber = new PoNumber(request.Dto.PoNumber);
 
         var customerId = request.Dto.CustomerId;

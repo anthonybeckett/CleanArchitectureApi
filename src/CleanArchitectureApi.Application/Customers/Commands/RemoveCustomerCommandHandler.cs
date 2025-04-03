@@ -20,15 +20,11 @@ internal sealed class RemoveCustomerCommandHandler(IUnitOfWork unitOfWork)
             .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
 
         if (customer == null)
-        {
             return Result<NoContentDto>.Failure(HttpStatusCode.BadRequest, "Null.Error", "Customer not found");
-        }
 
         if (customer.Invoices.Count > 0)
-        {
             return Result<NoContentDto>.Failure(HttpStatusCode.BadRequest, "Invalid.Error",
                 "Customer cannot be removed when they have existing invoices.");
-        }
 
         _unitOfWork.Repository<Customer>().Delete(customer);
 

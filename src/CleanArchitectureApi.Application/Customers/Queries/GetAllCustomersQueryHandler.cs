@@ -12,8 +12,8 @@ namespace CleanArchitectureApi.Application.Customers.Queries;
 internal sealed class GetAllCustomersQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     : IQueryHandler<GetAllCustomersQuery, CustomerResponseCollection>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result<CustomerResponseCollection>> Handle(GetAllCustomersQuery request,
         CancellationToken cancellationToken)

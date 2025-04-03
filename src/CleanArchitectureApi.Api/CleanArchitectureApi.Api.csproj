@@ -10,23 +10,23 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CleanArchitectureApi.Application\CleanArchitectureApi.Application.csproj" />
-      <ProjectReference Include="..\CleanArchitectureApi.Domain\CleanArchitectureApi.Domain.csproj" />
-      <ProjectReference Include="..\CleanArchitectureApi.Infrastructure\CleanArchitectureApi.Infrastructure.csproj" />
+        <ProjectReference Include="..\CleanArchitectureApi.Application\CleanArchitectureApi.Application.csproj"/>
+        <ProjectReference Include="..\CleanArchitectureApi.Domain\CleanArchitectureApi.Domain.csproj"/>
+        <ProjectReference Include="..\CleanArchitectureApi.Infrastructure\CleanArchitectureApi.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

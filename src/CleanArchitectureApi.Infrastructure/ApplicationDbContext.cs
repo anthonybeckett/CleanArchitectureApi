@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Text.Json.Serialization;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Attributes;
 using CleanArchitectureApi.Domain.Customers.Entities;
@@ -17,6 +16,11 @@ namespace CleanArchitectureApi.Infrastructure;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
     : DbContext(options)
 {
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
+    {
+        TypeNameHandling = TypeNameHandling.All
+    };
+
     public DbSet<Customer> Customers { get; set; }
 
     public DbSet<Product> Products { get; set; }
@@ -26,11 +30,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
     public DbSet<OutboxMessage> OutboxMessages { get; set; }
-
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
-    {
-        TypeNameHandling = TypeNameHandling.All,
-    };
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

@@ -1,10 +1,8 @@
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Customers.Entities;
 using CleanArchitectureApi.Domain.InvoiceItems.Entities;
-using CleanArchitectureApi.Domain.InvoiceItems.ValueObjects;
 using CleanArchitectureApi.Domain.Invoices.Events;
 using CleanArchitectureApi.Domain.Invoices.ValueObjects;
-using CleanArchitectureApi.Domain.Products.Entities;
 using CleanArchitectureApi.Domain.Shared.Exceptions;
 using CleanArchitectureApi.Domain.Shared.ValueObjects;
 
@@ -50,9 +48,7 @@ public sealed class Invoice : BaseEntity
     )
     {
         if (purchasedProductsItems is null || purchasedProductsItems.Count == 0)
-        {
             throw new BadRequestException(["Empty invoice cannot be created"]);
-        }
 
         var totalBalance = purchasedProductsItems.Sum(x => x.TotalPrice.Value);
 
@@ -63,7 +59,7 @@ public sealed class Invoice : BaseEntity
             purchasedProductsItems,
             new Balance(totalBalance)
         );
-        
+
         invoice.RaiseDomainEvent(new InvoiceCreatedDomainEvent(invoiceId));
 
         return invoice;

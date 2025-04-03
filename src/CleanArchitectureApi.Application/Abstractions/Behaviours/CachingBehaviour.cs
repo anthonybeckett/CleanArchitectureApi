@@ -17,28 +17,26 @@ public class CachingBehaviour<TRequest, TResponse>(
     {
         var cachedResult = await cacheService.GetAsync<TResponse>(request.CacheKey, cancellationToken);
 
-        string requestName = typeof(TRequest).Name;
+        var requestName = typeof(TRequest).Name;
 
         if (cachedResult != null)
         {
             logger.LogInformation($"{requestName} cached");
-            
+
             return cachedResult;
         }
-        
+
         logger.LogInformation($"{requestName} has no cache");
 
         var result = await next();
 
         if (!result.IsNotSuccessful)
-        {
             await cacheService.SetAsync(
                 request.CacheKey,
                 result,
                 request.Expiration,
                 cancellationToken
             );
-        }
 
         return result;
     }

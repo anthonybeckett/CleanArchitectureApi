@@ -17,7 +17,7 @@ public class RequestContextLoggingMiddleware(RequestDelegate next)
     private static string GetCorrelationId(HttpContext context)
     {
         context.Request.Headers.TryGetValue(CORRELATION_ID_HEADER_NAME, out var value);
-        
+
         return value.FirstOrDefault() ?? context.TraceIdentifier;
     }
 }

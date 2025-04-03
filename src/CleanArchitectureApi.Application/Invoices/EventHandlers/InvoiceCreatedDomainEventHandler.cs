@@ -1,5 +1,3 @@
-using System.Net;
-using CleanArchitectureApi.Application.Abstractions.DTO;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Invoices.Entities;
 using CleanArchitectureApi.Domain.Invoices.Events;
@@ -20,16 +18,13 @@ internal sealed class InvoiceCreatedDomainEventHandler(IUnitOfWork unitOfWork)
             .AsTracking()
             .Include(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == notification.InvoiceId, cancellationToken);
-        
-        if (invoice is null)
-        {
-            return;
-        }
-        
+
+        if (invoice is null) return;
+
         invoice.Customer.UpdateBalance(invoice.TotalBalance.Value);
-        
+
         _unitOfWork.Repository<Invoice>().Update(invoice);
-        
+
         await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

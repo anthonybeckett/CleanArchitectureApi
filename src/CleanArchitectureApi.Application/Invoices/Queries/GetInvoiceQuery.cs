@@ -6,7 +6,7 @@ namespace CleanArchitectureApi.Application.Invoices.Queries;
 
 public record GetInvoiceQuery(Guid InvoiceId) : IQuery<InvoiceResponse>, ICachedQuery
 {
-    public string CacheKey  => $"invoice-{InvoiceId}";
+    public string CacheKey => $"invoice-{InvoiceId}";
 
     public TimeSpan? Expiration => null;
 }

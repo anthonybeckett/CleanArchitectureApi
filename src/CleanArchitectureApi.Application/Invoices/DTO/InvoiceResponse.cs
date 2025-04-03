@@ -2,7 +2,6 @@ using AutoMapper;
 using CleanArchitectureApi.Application.Customers.DTO;
 using CleanArchitectureApi.Application.InvoiceItems.DTO;
 using CleanArchitectureApi.Domain.Abstractions;
-using CleanArchitectureApi.Domain.InvoiceItems.Entities;
 using CleanArchitectureApi.Domain.Invoices.Entities;
 
 namespace CleanArchitectureApi.Application.Invoices.DTO;

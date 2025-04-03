@@ -39,7 +39,7 @@
       - "9000:80"
     networks:
       - default
-        
+  
   cleanarchitectureapi.redis:
     image: redis:latest
     container_name: redis

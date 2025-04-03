@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
 
@@ -19,7 +18,7 @@ internal sealed class ProcessOutboxMessagesJobs(
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new()
     {
-        TypeNameHandling = TypeNameHandling.All,
+        TypeNameHandling = TypeNameHandling.All
     };
 
     public async Task Execute(IJobExecutionContext context)
@@ -41,10 +40,7 @@ internal sealed class ProcessOutboxMessagesJobs(
                     var domainEvent =
                         JsonConvert.DeserializeObject<IDomainEvent>(outboxMessage.Content, JsonSerializerSettings);
 
-                    if (domainEvent == null)
-                    {
-                        throw new ArgumentNullException(nameof(domainEvent));
-                    }
+                    if (domainEvent == null) throw new ArgumentNullException(nameof(domainEvent));
 
                     await publisher.Publish(domainEvent, context.CancellationToken);
                 }
@@ -96,7 +92,7 @@ internal sealed class ProcessOutboxMessagesJobs(
         Exception? exception)
     {
         var outboxMessage = await dbContext.OutboxMessages.FindAsync(outboxMessageResponse.Id);
-        
+
         outboxMessage!.Update(DateTime.UtcNow, exception?.ToString()!);
     }
 

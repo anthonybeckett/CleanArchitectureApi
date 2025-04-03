@@ -16,12 +16,10 @@ internal sealed class RemoveProductCommandHandler(IUnitOfWork unitOfWork) : ICom
             .GetByIdAsync(request.ProductId, cancellationToken);
 
         if (product == null)
-        {
             return Result<NoContentDto>.Failure(HttpStatusCode.BadRequest, "Null.Error", "Product not found");
-        }
-        
+
         _unitOfWork.Repository<Product>().Delete(product);
-        
+
         await _unitOfWork.CommitAsync(cancellationToken);
 
         return Result<NoContentDto>.Success(HttpStatusCode.NoContent);

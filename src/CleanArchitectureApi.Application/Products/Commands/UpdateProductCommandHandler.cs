@@ -17,19 +17,17 @@ internal sealed class UpdateProductCommandHandler(IUnitOfWork unitOfWork) : ICom
             .GetByIdAsync(request.ProductId, cancellationToken);
 
         if (product == null)
-        {
             return Result<NoContentDto>.Failure(HttpStatusCode.BadRequest, "Null.Error", "Product not found");
-        }
 
         var productDto = request.Dto;
         Title description = new(request.Dto.Description ?? "");
         Balance unitPrice = new(request.Dto.UnitPrice);
 
         product.Update(description, unitPrice);
-        
+
         _unitOfWork.Repository<Product>().Update(product);
-        
-        await _unitOfWork.CommitAsync(cancellationToken, checkConcurrency: true);
+
+        await _unitOfWork.CommitAsync(cancellationToken, true);
 
         return Result<NoContentDto>.Success(HttpStatusCode.NoContent);
     }
