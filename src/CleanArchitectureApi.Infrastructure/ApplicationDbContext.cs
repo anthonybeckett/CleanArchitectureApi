@@ -2,19 +2,22 @@ using System.Reflection;
 using CleanArchitectureApi.Domain.Abstractions;
 using CleanArchitectureApi.Domain.Attributes;
 using CleanArchitectureApi.Domain.Customers.Entities;
+using CleanArchitectureApi.Domain.Identity.Roles.Entities;
+using CleanArchitectureApi.Domain.Identity.Users.Entities;
 using CleanArchitectureApi.Domain.InvoiceItems.Entities;
 using CleanArchitectureApi.Domain.Invoices.Entities;
 using CleanArchitectureApi.Domain.Products.Entities;
 using CleanArchitectureApi.Domain.Shared.Exceptions;
 using CleanArchitectureApi.Infrastructure.Outbox;
 using MediatR;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace CleanArchitectureApi.Infrastructure;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
-    : DbContext(options)
+    : IdentityDbContext<AppUser, AppRole, Guid>
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new()
     {
@@ -48,11 +51,20 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         base.OnModelCreating(modelBuilder);
     }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            // Todo: Fix this and be able to run migrations without hard coding this string
+            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=cleanarchitectureapi;User Id=sa;Password=Passw0rd!;TrustServerCertificate=True");
+        }
+    }
 
     private void AddDomainEventsAsOutboxMessages()
     {
         var outboxMessages = ChangeTracker
-            .Entries<BaseEntity>()
+            .Entries<IDomainEventRaiser>()
             .Select(entry => entry.Entity)
             .SelectMany(entity =>
                 {

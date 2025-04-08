@@ -26,12 +26,13 @@ public class AppRole : IdentityRole<Guid>, IAutoseedData
     [AutoSeedData]
     public static AppRole User => new(
         Guid.Parse("CF005204-6AAC-4AD4-8EA3-346C5A665CB1"),
-        Guid.NewGuid().ToString(),
-        "User");
+        "3e8a2c66-9e8b-4fc6-a8cf-14bdf6fcb2f7",
+        "User"
+        );
 
     [AutoSeedData]
     public static AppRole Admin => new(
         Guid.Parse("0A83E49B-7630-4CBC-9047-2F6E55301CC2"),
-        Guid.NewGuid().ToString(),
+        "d1f4bc78-5d4a-4eb9-9c6d-c5cdb9f96a76",
         "Admin");
 }

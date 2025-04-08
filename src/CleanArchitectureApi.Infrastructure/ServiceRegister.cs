@@ -1,13 +1,21 @@
+using System.Numerics;
+using System.Text;
 using CleanArchitectureApi.Application.Abstractions.Cache;
 using CleanArchitectureApi.Application.Abstractions.Emails;
+using CleanArchitectureApi.Application.Abstractions.TokenProvider;
 using CleanArchitectureApi.Domain.Abstractions;
+using CleanArchitectureApi.Domain.Identity.Roles.Entities;
+using CleanArchitectureApi.Domain.Identity.Users.Entities;
 using CleanArchitectureApi.Infrastructure.Outbox;
 using CleanArchitectureApi.Infrastructure.Repositories;
 using CleanArchitectureApi.Infrastructure.Services.Caching;
 using CleanArchitectureApi.Infrastructure.Services.Email;
+using CleanArchitectureApi.Infrastructure.Services.TokenProvider;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Quartz;
 
 namespace CleanArchitectureApi.Infrastructure;
@@ -25,6 +33,8 @@ public static class ServiceRegister
         AddHealthChecks(services, configuration);
 
         AddBackgroundJobs(services, configuration);
+
+        AddIdentity(services, configuration);
 
         return services;
     }
@@ -79,6 +89,47 @@ public static class ServiceRegister
 
         services.ConfigureOptions<ProcessOutboxMessagesJobsSetup>();
 
+        return services;
+    }
+
+    private static IServiceCollection AddIdentity(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIdentityCore<AppUser>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequiredUniqueChars = 2;
+                options.Password.RequiredLength = 8;
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+            })
+            .AddRoles<AppRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+                    ValidateLifetime = false,
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+        
+        services.Configure<TokenSettings>(configuration.GetSection("JWT"));
+
+        services.AddTransient<ITokenService, TokenService>();
+        
         return services;
     }
 }
