@@ -7,7 +7,7 @@
       dockerfile: src/CleanArchitectureApi.Api/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Database=Server=cleanarchitectureapi.db;Database=cleanarchitectureapi;User Id=sa;Password=Passw0rd!;TrustServerCertificate=True;
+      - ConnectionStrings_Database=Server=${MSSQL_SERVER};Database=${MSSQL_DATABASE};User Id=${MSSQL_USERNAME};Password=${MSSQL_PASSWORD};TrustServerCertificate=True;
     ports:
       - "5000:8080"
       - "5001:8081"
@@ -21,7 +21,7 @@
     container_name: db
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Passw0rd!
+      - MSSQL_SA_PASSWORD=${MSSQL_PASSWORD}
     ports:
       - "1433:1433"
     volumes:

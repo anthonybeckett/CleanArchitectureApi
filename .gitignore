@@ -1,7 +1,9 @@
 .idea
 
 .env
-.env.*
+.env.production
+.env.staging
+.env.testing
 
 appsettings.Development.json
 appsettings.Production.json

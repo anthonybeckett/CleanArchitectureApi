@@ -12,11 +12,12 @@ using CleanArchitectureApi.Infrastructure.Outbox;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace CleanArchitectureApi.Infrastructure;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher, IConfiguration configuration)
     : IdentityDbContext<AppUser, AppRole, Guid>
 {
     private static readonly JsonSerializerSettings JsonSerializerSettings = new()
@@ -56,8 +57,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         if (!optionsBuilder.IsConfigured)
         {
-            // Todo: Fix this and be able to run migrations without hard coding this string
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=cleanarchitectureapi;User Id=sa;Password=Passw0rd!;TrustServerCertificate=True");
+            var connectionString = configuration.GetConnectionString("Database");
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 
