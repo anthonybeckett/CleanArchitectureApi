@@ -62,16 +62,16 @@ public class AppUser : IdentityUser<Guid>, IDomainEventRaiser
         RefreshTokenExpireDate = refreshTokenExpireDate;
     }
 
-    public void UpdateRefreshToken(string refreshToken, DateTime refreshTokenExpireDate)
+    public void UpdateRefreshToken(string existingRefreshToken, string newRefreshToken, DateTime newRefreshTokenExpireDate)
     {
-        if (!string.IsNullOrEmpty(RefreshToken) && !RefreshToken.Equals(refreshToken))
+        if (!string.IsNullOrEmpty(RefreshToken) && !RefreshToken.Equals(existingRefreshToken))
             throw new InvalidTokenException(["Invalid refresh token"]);
 
         if (RefreshTokenExpireDate.HasValue && RefreshTokenExpireDate < DateTime.Now)
             throw new InvalidTokenException(["Refresh token expired"]);
 
-        RefreshToken = refreshToken;
-        RefreshTokenExpireDate = refreshTokenExpireDate;
+        RefreshToken = newRefreshToken;
+        RefreshTokenExpireDate = newRefreshTokenExpireDate;
     }
 
     public void RevokeUser()

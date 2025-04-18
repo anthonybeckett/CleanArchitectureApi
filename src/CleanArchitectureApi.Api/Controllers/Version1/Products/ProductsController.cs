@@ -2,10 +2,12 @@ using CleanArchitectureApi.Application.Products.Commands;
 using CleanArchitectureApi.Application.Products.DTO;
 using CleanArchitectureApi.Application.Products.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitectureApi.Api.Controllers.Version1.Products;
 
+[Authorize]
 [ApiController]
 [Route("/api/[controller]")]
 public class ProductsController(ISender sender) : BaseController

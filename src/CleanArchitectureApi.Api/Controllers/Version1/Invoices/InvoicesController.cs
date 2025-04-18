@@ -2,10 +2,12 @@ using CleanArchitectureApi.Application.Invoices.Commands;
 using CleanArchitectureApi.Application.Invoices.DTO;
 using CleanArchitectureApi.Application.Invoices.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitectureApi.Api.Controllers.Version1.Invoices;
 
+[Authorize]
 [ApiController]
 [Route("/api/invoices")]
 public class InvoicesController(ISender sender) : BaseController

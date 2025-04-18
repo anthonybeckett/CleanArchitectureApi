@@ -53,7 +53,7 @@ internal sealed class RefreshTokenCommandHandler(UserManager<AppUser> userManage
 
         var refreshTokenExpireDate = tokenService.GetRefreshTokenExpirationDate();
         
-        user.UpdateRefreshToken(newRefreshToken, refreshTokenExpireDate);
+        user.UpdateRefreshToken(request.Dto.RefreshToken, newRefreshToken, refreshTokenExpireDate);
 
         var newAccessToken = await tokenService.CreateTokenAsync(user, roles);
 

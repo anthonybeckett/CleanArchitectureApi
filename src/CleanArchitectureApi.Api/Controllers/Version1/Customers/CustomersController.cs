@@ -2,10 +2,12 @@ using CleanArchitectureApi.Application.Customers.Commands;
 using CleanArchitectureApi.Application.Customers.DTO;
 using CleanArchitectureApi.Application.Customers.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitectureApi.Api.Controllers.Version1.Customers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class CustomersController(ISender sender) : BaseController

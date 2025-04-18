@@ -51,6 +51,18 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
             InternalServerException internalServerException => Result<NoContentDto>.Failure(
                 HttpStatusCode.InternalServerError, internalServerException.Errors),
 
+            InvalidTokenException invalidTokenException
+                => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
+                    invalidTokenException.Errors),
+
+            AdminKeyNotMatchException adminKeyNotMatchException
+                => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
+                    adminKeyNotMatchException.Errors),
+
+            UserAlreadyExistsException userAlreadyExistsException
+                => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
+                    userAlreadyExistsException.Error),
+
             _ => Result<NoContentDto>.Failure(HttpStatusCode.InternalServerError, new Error
             {
                 ErrorCode = "Internal Server Error",
