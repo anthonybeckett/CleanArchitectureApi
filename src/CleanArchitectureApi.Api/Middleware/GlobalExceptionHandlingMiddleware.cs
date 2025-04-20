@@ -33,35 +33,15 @@ public class GlobalExceptionHandlingMiddleware(RequestDelegate next, ILogger<Glo
     {
         return exception switch
         {
-            RequestValidationException validationException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                validationException.Error),
-
-            ConcurrencyException concurrencyException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                concurrencyException.Error),
-
-            NullObjectException nullObjectException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                nullObjectException.Error),
-
-            BadRequestException badRequestException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                badRequestException.Errors),
-
-            PayloadFormatException payloadFormatException => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                payloadFormatException.Error),
-
-            InternalServerException internalServerException => Result<NoContentDto>.Failure(
-                HttpStatusCode.InternalServerError, internalServerException.Errors),
-
-            InvalidTokenException invalidTokenException
+            IBadRequest badRequestException
                 => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                    invalidTokenException.Errors),
+                    badRequestException.Error
+                ),
 
-            AdminKeyNotMatchException adminKeyNotMatchException
-                => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                    adminKeyNotMatchException.Errors),
-
-            UserAlreadyExistsException userAlreadyExistsException
-                => Result<NoContentDto>.Failure(HttpStatusCode.BadRequest,
-                    userAlreadyExistsException.Error),
+            IInternalServerError internalServerException
+                => Result<NoContentDto>.Failure(
+                    HttpStatusCode.InternalServerError, internalServerException.Error
+                ),
 
             _ => Result<NoContentDto>.Failure(HttpStatusCode.InternalServerError, new Error
             {
