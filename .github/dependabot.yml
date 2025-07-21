@@ -1,21 +1,21 @@
-version: 2
-updates:
-  - package-ecosystem: "nuget"
-    directory: "/src/CleanArchitectureApi.Domain"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "nuget"
-    directory: "/src/CleanArchitectureApi.Application"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "nuget"
-    directory: "/src/CleanArchitectureApi.Infrastructure"
-    schedule:
-      interval: "weekly"
-
-  - package-ecosystem: "nuget"
-    directory: "/src/CleanArchitectureApi.Api"
-    schedule:
-      interval: "weekly"
+#version: 2
+#updates:
+#  - package-ecosystem: "nuget"
+#    directory: "/src/CleanArchitectureApi.Domain"
+#    schedule:
+#      interval: "weekly"
+#
+#  - package-ecosystem: "nuget"
+#    directory: "/src/CleanArchitectureApi.Application"
+#    schedule:
+#      interval: "weekly"
+#
+#  - package-ecosystem: "nuget"
+#    directory: "/src/CleanArchitectureApi.Infrastructure"
+#    schedule:
+#      interval: "weekly"
+#
+#  - package-ecosystem: "nuget"
+#    directory: "/src/CleanArchitectureApi.Api"
+#    schedule:
+#      interval: "weekly"
