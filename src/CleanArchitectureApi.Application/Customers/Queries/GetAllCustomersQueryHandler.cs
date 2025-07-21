@@ -19,10 +19,11 @@ internal sealed class GetAllCustomersQueryHandler(IUnitOfWork unitOfWork, IMappe
         CancellationToken cancellationToken)
     {
         var customers = await _unitOfWork.Repository<Customer>()
-            .GetAll()
-            .AsNoTracking()
-            .ProjectTo<CustomerResponse>(_mapper.ConfigurationProvider)
-            .ToListAsync(cancellationToken);
+            .QueryAsync(q =>
+                q.AsNoTracking()
+                    .ProjectTo<CustomerResponse>(_mapper.ConfigurationProvider)
+                    .ToListAsync(cancellationToken)
+            );
 
         var response = new CustomerResponseCollection
         {

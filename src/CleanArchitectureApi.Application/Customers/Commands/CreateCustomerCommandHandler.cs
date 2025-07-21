@@ -31,7 +31,7 @@ internal sealed class CreateCustomerCommandHandler(IUnitOfWork unitOfWork, IMapp
 
         var customer = Customer.Create(customerTitle, customerAddress);
 
-        await _unitOfWork.Repository<Customer>().CreateAsync(customer);
+        await _unitOfWork.Repository<Customer>().CreateAsync(customer, cancellationToken);
 
         await _unitOfWork.CommitAsync(cancellationToken);
 

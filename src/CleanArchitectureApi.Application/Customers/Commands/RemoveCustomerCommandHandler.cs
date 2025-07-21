@@ -15,9 +15,10 @@ internal sealed class RemoveCustomerCommandHandler(IUnitOfWork unitOfWork)
     public async Task<Result<NoContentDto>> Handle(RemoveCustomerCommand request, CancellationToken cancellationToken)
     {
         var customer = await _unitOfWork.Repository<Customer>()
-            .GetAll()
-            .Include(x => x.Invoices)
-            .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken);
+            .QueryAsync(q => 
+                q.Include(x => x.Invoices)
+                    .FirstOrDefaultAsync(x => x.Id == request.CustomerId, cancellationToken)
+            );
 
         if (customer == null)
             return Result<NoContentDto>.Failure(HttpStatusCode.BadRequest, "Null.Error", "Customer not found");
