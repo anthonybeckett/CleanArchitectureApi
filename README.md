@@ -7,3 +7,9 @@ Helper notes:
 ```bash
     dotnet ef migrations add Initial --startup-project ../CleanArchitectureApi.Api
 ```
+
+Endpoints for the API can be accessed in Development mode through this url:
+
+```bash
+http://localhost:5000/scalar/v1
+```
