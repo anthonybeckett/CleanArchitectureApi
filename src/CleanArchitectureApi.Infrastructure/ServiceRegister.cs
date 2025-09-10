@@ -109,13 +109,28 @@ public static class ServiceRegister
 
     private static IServiceCollection AddIdentity(IServiceCollection services, IConfiguration configuration)
     {
+        // Possibly need a better way of handling this but if running locally, use the .env file config directly
+        // else if using docker, use the configuration option
         var jwtSettings = new JwtSettings
         {
-            Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
-            Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
-            Secret = Environment.GetEnvironmentVariable("JWT_SECRET"),
-            TokenValidityInMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_TOKEN_VALIDITY_MINUTES") ?? "15"),
-            RefreshTokenValidityInDays = int.Parse(Environment.GetEnvironmentVariable("JWT_REFRESH_TOKEN_VALIDITY_DAYS") ?? "60")
+            Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") 
+                       ?? configuration["Jwt:Audience"],
+               
+            Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") 
+                     ?? configuration["Jwt:Issuer"],
+             
+            Secret = Environment.GetEnvironmentVariable("JWT_SECRET") 
+                     ?? configuration["Jwt:Secret"],
+             
+            TokenValidityInMinutes = int.Parse(
+                Environment.GetEnvironmentVariable("JWT_TOKEN_VALIDITY_MINUTES") 
+                ?? configuration["Jwt:TokenValidityInMinutes"] 
+                ?? "15"),
+        
+            RefreshTokenValidityInDays = int.Parse(
+                Environment.GetEnvironmentVariable("JWT_REFRESH_TOKEN_VALIDITY_DAYS") 
+                ?? configuration["Jwt:RefreshTokenValidityInDays"] 
+                ?? "60")
         };
         
         services.AddIdentityCore<AppUser>(options =>
