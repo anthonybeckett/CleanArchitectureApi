@@ -8,7 +8,7 @@ public static class ServiceRegister
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
         var applicationAssembly = Assembly.GetExecutingAssembly();
 

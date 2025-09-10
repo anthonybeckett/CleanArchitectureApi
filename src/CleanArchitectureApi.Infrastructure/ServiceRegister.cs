@@ -4,6 +4,7 @@ using CleanArchitectureApi.Application.Abstractions.Cache;
 using CleanArchitectureApi.Application.Abstractions.Emails;
 using CleanArchitectureApi.Application.Abstractions.TokenProvider;
 using CleanArchitectureApi.Domain.Abstractions;
+using CleanArchitectureApi.Domain.Identity.Jwt.ValueObjects;
 using CleanArchitectureApi.Domain.Identity.Roles.Entities;
 using CleanArchitectureApi.Domain.Identity.Users.Entities;
 using CleanArchitectureApi.Infrastructure.Outbox;
@@ -22,8 +23,12 @@ namespace CleanArchitectureApi.Infrastructure;
 
 public static class ServiceRegister
 {
+    private static string? _connString;
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        FetchConnectionString();
+        
         AddDbConnection(services, configuration);
 
         AddServicesToDiContainer(services, configuration);
@@ -39,11 +44,21 @@ public static class ServiceRegister
         return services;
     }
 
+    private static void FetchConnectionString()
+    {
+        _connString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+
+        if (_connString == null)
+        {
+            throw new Exception("DB_CONNECTION environment variable not set");
+        }
+    }
+
     private static IServiceCollection AddDbConnection(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("Database"));
+            options.UseSqlServer(_connString);
         });
 
         return services;
@@ -73,7 +88,7 @@ public static class ServiceRegister
     private static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
-            .AddSqlServer(configuration.GetConnectionString("Database") ?? throw new InvalidOperationException())
+            .AddSqlServer(_connString ?? throw new InvalidOperationException())
             .AddRedis(configuration.GetConnectionString("Cache") ?? throw new InvalidOperationException());
 
         return services;
@@ -94,6 +109,15 @@ public static class ServiceRegister
 
     private static IServiceCollection AddIdentity(IServiceCollection services, IConfiguration configuration)
     {
+        var jwtSettings = new JwtSettings
+        {
+            Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE"),
+            Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
+            Secret = Environment.GetEnvironmentVariable("JWT_SECRET"),
+            TokenValidityInMinutes = int.Parse(Environment.GetEnvironmentVariable("JWT_TOKEN_VALIDITY_MINUTES") ?? "15"),
+            RefreshTokenValidityInDays = int.Parse(Environment.GetEnvironmentVariable("JWT_REFRESH_TOKEN_VALIDITY_DAYS") ?? "60")
+        };
+        
         services.AddIdentityCore<AppUser>(options =>
             {
                 options.User.RequireUniqueEmail = true;
@@ -118,10 +142,10 @@ public static class ServiceRegister
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
                     ValidateLifetime = false,
-                    ValidIssuer = configuration["JWT:Issuer"],
-                    ValidAudience = configuration["JWT:Audience"],
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
                     ClockSkew = TimeSpan.Zero
                 };
             });

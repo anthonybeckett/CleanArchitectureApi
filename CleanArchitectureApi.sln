@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{14F11F2E-B675-4E27-B3AA-9260D6AB805D}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
+		.env = .env
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitectureApi.Api", "src\CleanArchitectureApi.Api\CleanArchitectureApi.Api.csproj", "{72737996-7CDF-40CF-8819-079C825BAFFB}"
