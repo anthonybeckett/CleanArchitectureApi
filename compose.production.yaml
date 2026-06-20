@@ -5,10 +5,6 @@
     build:
       context: .
       dockerfile: src/CleanArchitectureApi.Api/Dockerfile
-      target: dev
-    volumes:
-      - .:/src  
-    working_dir: /src
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - DOTNET_ENVIRONMENT=${DOTNET_ENVIRONMENT}
